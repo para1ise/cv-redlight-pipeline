@@ -1,0 +1,35 @@
+# Сцена: перекрёсток на окраине Иокогамы (live-трансляция, 1280x720, 30 FPS)
+# https://www.youtube.com/watch?v=1CI685iPIUQ
+# Координаты заданы в пикселях исходного кадра.
+
+model:
+  weights: yolo11s.pt        # предобученные веса COCO
+  imgsz: 960
+  conf: 0.25
+  device: 0                  # 0 — GPU, cpu — процессор
+  half: false                # FP16: на GTX 16xx даёт NaN, поэтому выключено
+  classes: [car, motorcycle, bus, truck, bicycle]
+  agnostic_nms: true         # один объект — одна рамка (без дублей car/truck)
+  min_hits: 3                # трек выдаётся наружу после N кадров жизни
+
+tracker: configs/bytetrack.yaml
+
+# Контрольная линия (tripwire): направленный отрезок a -> b
+zones:
+  - id: stop_line
+    points: [[412, 520], [946, 318]]
+
+# Светофор: прямоугольник [x1, y1, x2, y2] вокруг ламп
+traffic_lights:
+  - id: main_light
+    roi: [330, 0, 430, 40]
+    min_pixels: 15
+
+# Проезд на красный: пересечение линии в направлении от камеры при красном сигнале
+rules:
+  - id: red_light_violation
+    zone: stop_line
+    light: main_light
+    direction: to_right      # от камеры (to_left — к камере)
+    classes: [car, motorcycle, bus, truck, bicycle]
+    grace_sec: 0.3           # допуск после включения красного

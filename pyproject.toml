@@ -1,0 +1,29 @@
+[project]
+name = "cv-roi-incidents"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "imageio-ffmpeg>=0.6.0",
+    "lap>=0.5.12",
+    "numpy",
+    "opencv-python>=4.10",
+    "pyyaml>=6.0.3",
+    "torch>=2.6.0",
+    "torchvision>=0.21.0",
+    "ultralytics>=8.3",
+    "yt-dlp[default]>=2025.1",
+]
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu124" }
+torchvision = { index = "pytorch-cu124" }
+
+[[tool.uv.index]]
+name = "pytorch-cu124"
+url = "https://download.pytorch.org/whl/cu124"
+explicit = true
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+]

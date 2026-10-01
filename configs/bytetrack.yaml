@@ -1,0 +1,7 @@
+tracker_type: bytetrack
+track_high_thresh: 0.3     # порог "уверенных" детекций для первой ассоциации
+track_low_thresh: 0.1      # вторая ассоциация: слабые детекции (суть ByteTrack)
+new_track_thresh: 0.4      # выше дефолта 0.25 — меньше ложных новых треков
+track_buffer: 60           # дефолт 30: держим потерянный трек 2 с (30 FPS) — меньше id-switch при перекрытиях
+match_thresh: 0.8
+fuse_score: true
